@@ -1,6 +1,6 @@
-# Inventario visual del carrito de herramientas
+# Estándar visual del carrito de herramientas
 
-Catálogo interactivo compatible con GitHub Pages.
+Catálogo profesional e interactivo compatible con GitHub Pages. Conserva el acomodo lateral de Genially e incluye nueve cajones, puntos interactivos, fichas técnicas, búsqueda y vista de lista.
 
 ## Publicar
 
