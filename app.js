@@ -235,10 +235,20 @@ const socketDrawer = drawers.find(drawer => drawer.id === 8);
 Object.assign(socketDrawer.tools[0], { hitW: 72, hitH: 62 });
 applyHitboxes(socketDrawer.detailTools, HITBOXES[8]);
 
+drawers.forEach(drawer => {
+  drawer.tools.forEach((item, index) => {
+    item.image = `./images/tools/cajon-${drawer.id}-${String(index + 1).padStart(2, "0")}.webp`;
+  });
+});
+socketDrawer.detailTools.forEach((item, index) => {
+  item.image = `./images/tools/cajon-8-detalle-${String(index + 1).padStart(2, "0")}.webp`;
+});
+
 const app = document.querySelector("#app");
 const modal = document.querySelector("#toolModal");
 const modalContent = document.querySelector("#toolModalContent");
-let selectedDrawer = 1;
+let introOpen = true;
+let selectedDrawer = 2;
 let listOpen = false;
 let detailOpen = false;
 
@@ -247,12 +257,43 @@ function toolCount(tools) {
 }
 
 function render() {
+  if (introOpen) {
+    app.innerHTML = `
+      <section class="welcome-screen">
+        <div class="welcome-glow"></div>
+        <div class="welcome-copy">
+          <p class="welcome-kicker">CONFIGURACIÓN APROBADA · MANTENIMIENTO</p>
+          <h1>Estándar visual de <strong>herramientas</strong></h1>
+          <p class="welcome-description">Consulta el contenido de cada cajón y toca directamente una herramienta para ver su identificación, medida e imagen.</p>
+          <div class="welcome-stats" aria-label="Resumen del estándar">
+            <div><strong>9</strong><span>CAJONES</span></div>
+            <div><strong>${TOTAL_STANDARD_TOOLS}</strong><span>HERRAMIENTAS</span></div>
+            <div><strong>✓</strong><span>CONFIGURACIÓN</span></div>
+          </div>
+          <button class="welcome-button" id="enterCatalog">Abrir catálogo <span>→</span></button>
+        </div>
+        <div class="welcome-visual">
+          <div class="welcome-cart-frame">
+            <img src="./images/carrito.jpeg" alt="Carrito GearWrench de mantenimiento">
+          </div>
+          <span>CARRO ESTÁNDAR · 9 CAJONES</span>
+        </div>
+      </section>`;
+
+    document.querySelector("#enterCatalog").addEventListener("click", () => {
+      introOpen = false;
+      render();
+    });
+    return;
+  }
+
   const drawer = drawers.find(item => item.id === selectedDrawer);
   const showingDetail = drawer.id === 8 && detailOpen;
   const visibleTools = showingDetail ? drawer.detailTools : drawer.tools;
   const visibleImage = showingDetail ? drawer.detailImage : drawer.image;
   const visibleTitle = showingDetail ? "Interior del juego de dados" : drawer.title;
   const visibleCategory = showingDetail ? "Selecciona una pieza para consultar su medida" : drawer.category;
+  const visibleRatio = showingDetail ? "936 / 706" : drawer.id === 2 ? "795 / 445" : "4 / 3";
 
   app.innerHTML = `
     <div class="catalog-shell">
@@ -261,6 +302,7 @@ function render() {
           <span>ESTÁNDAR DE</span>
           <strong>HERRAMIENTAS</strong>
           <span>DE MANTENIMIENTO</span>
+          <button class="home-button" id="homeButton" aria-label="Volver al inicio">⌂ Inicio</button>
         </div>
 
         <div class="navigation-zone">
@@ -296,7 +338,7 @@ function render() {
           </div>
         </header>
 
-        <div class="image-panel ${drawer.imageClass || ""} ${showingDetail ? "detail-view" : ""}">
+        <div class="image-panel ${drawer.imageClass || ""} ${showingDetail ? "detail-view" : ""}" style="--image-ratio:${visibleRatio}">
           <img src="${visibleImage}" alt="${visibleTitle}">
           <div class="image-shade"></div>
           ${visibleTools.map((item, index) => `
@@ -337,6 +379,13 @@ function render() {
       detailOpen = false;
       render();
     }));
+
+  document.querySelector("#homeButton")?.addEventListener("click", () => {
+    introOpen = true;
+    listOpen = false;
+    detailOpen = false;
+    render();
+  });
 
   document.querySelectorAll("[data-tool]").forEach(button =>
     button.addEventListener("click", () => {
@@ -398,18 +447,16 @@ function renderList(drawer, tools) {
 function openTool(drawer, item) {
   modalContent.innerHTML = `
     <div class="modal-kicker"><span>CAJÓN ${drawer.id}</span><b>FICHA DE HERRAMIENTA</b></div>
+    <figure class="tool-preview">
+      <img src="${item.image}" alt="${item.name} ${item.specification}" onerror="this.closest('figure').classList.add('is-missing')">
+    </figure>
     <h2 id="toolTitle">${item.name}</h2>
     ${item.brand ? `<p class="tool-brand">${item.brand}</p>` : ""}
-    <div class="detail-cards">
-      <div><small>CANTIDAD ESTÁNDAR</small><strong>${item.quantity} ${item.quantity === 1 ? "pieza" : "piezas"}</strong></div>
-      <div><small>UBICACIÓN</small><strong>Cajón ${drawer.id}</strong></div>
-      <div><small>ESTADO</small><strong class="status-ok">● Vigente</strong></div>
+    <div class="tool-identification">
+      ${item.specification ? `<div><span>MEDIDA / ESPECIFICACIÓN</span><strong>${item.specification}</strong></div>` : ""}
+      ${item.part ? `<div><span>NÚMERO DE PARTE</span><strong>${item.part}</strong></div>` : ""}
     </div>
-    ${item.part ? `<div class="modal-row"><span>NÚM. DE PARTE</span><p>${item.part}</p></div>` : ""}
-    ${item.specification ? `<div class="modal-row specification"><span>ESPECIFICACIÓN</span><p>${item.specification}</p></div>` : ""}
-    <div class="modal-row"><span>USO</span><p>${item.use}</p></div>
-    <div class="modal-row safety"><span>SEGURIDAD</span><p>${item.safety}</p></div>
-    <button class="modal-primary" id="modalDone">Entendido</button>`;
+    <button class="modal-primary" id="modalDone">Cerrar ficha</button>`;
 
   modal.classList.remove("is-hidden");
   document.querySelector("#modalDone").addEventListener("click", closeModal);

@@ -9,6 +9,10 @@ interactivas, listas y fichas para teléfonos, tabletas, computadoras y pantalla
 grandes. También incluye un modo compacto para teléfonos colocados
 horizontalmente.
 
+La aplicación inicia con una portada profesional. Cada ficha utiliza un recorte
+de la fotografía original del cajón y muestra la pieza seleccionada, su nombre,
+medida y número de parte cuando está disponible.
+
 ## Publicar
 
 1. Descomprime el ZIP.
@@ -24,6 +28,10 @@ horizontalmente.
    `https://emanahd19-rgb.github.io/inventario-carrito-herramientas/`
 
 No requiere Node.js, instalación ni compilación.
+
+`generate-tool-images.js` solamente se utiliza al preparar el catálogo. Si
+cambias fotografías o posiciones, ejecútalo en una computadora con ImageMagick
+para volver a generar los recortes de las fichas.
 
 ## Agregar una herramienta seleccionable
 
