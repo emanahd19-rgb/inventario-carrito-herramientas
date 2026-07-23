@@ -203,6 +203,38 @@ const drawers = [
   }
 ];
 
+/*
+  Tamaños de las zonas originales de Genially, expresados como porcentaje
+  de la fotografía. Las zonas son transparentes: permiten tocar directamente
+  cada herramienta sin cubrirla con círculos o números.
+*/
+const HITBOXES = {
+  2: [[12.8,54.8],[17.7,3.1],[21.1,3.1],[23.8,3.1],[23.8,3.9],[26.2,4.2],[28.4,4.2],[27.8,3.1],[32.9,3.6],[33.9,4.2],[34.5,5.9],[19.1,2],[19.1,2],[21.1,2],[22.4,3],[22.4,2.3],[26.3,2.7],[29.6,4.7],[29.6,4.7],[35.8,4.7],[37.6,4.7],[12.2,42.1]],
+  3: [[32.5,14.3],[41.5,14.3],[12.7,29.4],[12.7,29.4],[12.1,41.3],[17.3,15.2]],
+  4: [[7.4,25],[6.7,20.5],[8.3,26.5],[8.6,49.4],[6.2,26.2],[9.8,58.1],[10.8,22.2],[7.1,28],[9.8,25.9],[11.1,25.9],[34.3,12.7],[34.3,12.7],[37.6,12.7],[33.3,15.7]],
+  5: [[4.3,41.5],[3.4,43.8],[2.8,35.6],[2.8,43.1],[4.2,41.8],[2.5,47.8],[2.7,51],[3.9,50.6]],
+  6: [[17,55.8],[13.5,58.7],[14.5,63.4],[8.7,34.2],[8.7,36.3]],
+  7: [[58,26.3],[66.2,8.8],[6.4,26.3],[13.4,63.1],[13.6,26.1]],
+  8: [[61.6,162.1],[35.8,7.9],[2.8,7.8],[2.8,7.8],[2.8,7.8],[2.8,7.8],[2.8,7.8],[32,5.6],[42.6,10.3],[56.2,11.8],[32,10.3],[19.2,3.6],[6,4.8],[2.8,9.7],[2.3,7.8],[1.6,7.8],[1.8,8.5],[2.1,9.6],[2.7,9.4],[2.4,9],[2.6,8.5],[3.4,9.4],[3.4,7.8],[2.5,7.8],[2.2,7.8],[2.4,8.2],[20.1,4.2],[20.1,3.1],[20.1,3.1],[20.1,3.1],[3.7,11.2],[3.7,11.2],[3.7,11.2]]
+};
+
+function applyHitboxes(tools, hitboxes) {
+  tools.forEach((item, index) => {
+    const [width = 10, height = 8] = hitboxes[index] || [];
+    item.hitW = Math.min(45, Math.max(4, width));
+    item.hitH = Math.min(45, Math.max(5, height));
+  });
+}
+
+drawers.forEach(drawer => {
+  if (drawer.id >= 2 && drawer.id <= 7) {
+    applyHitboxes(drawer.tools, HITBOXES[drawer.id]);
+  }
+});
+const socketDrawer = drawers.find(drawer => drawer.id === 8);
+Object.assign(socketDrawer.tools[0], { hitW: 72, hitH: 62 });
+applyHitboxes(socketDrawer.detailTools, HITBOXES[8]);
+
 const app = document.querySelector("#app");
 const modal = document.querySelector("#toolModal");
 const modalContent = document.querySelector("#toolModalContent");
@@ -268,18 +300,18 @@ function render() {
           <img src="${visibleImage}" alt="${visibleTitle}">
           <div class="image-shade"></div>
           ${visibleTools.map((item, index) => `
-            <button class="tool-hotspot" data-tool="${index}" style="left:${item.x}%;top:${item.y}%" aria-label="${item.action === "detail" ? "Abrir interior" : `Ver ${item.name} ${item.specification}`}">
+            <button class="tool-hotspot" data-tool="${index}" style="left:${item.x}%;top:${item.y}%;--hit-w:${item.hitW || 12}%;--hit-h:${item.hitH || 8}%" aria-label="${item.action === "detail" ? "Abrir interior" : `Ver ${item.name} ${item.specification}`}">
               <span>${item.action === "detail" ? "↗" : "+"}</span><em>${index + 1}</em>
             </button>`).join("")}
           ${!visibleTools.length ? `<div class="pending-state"><b>SIN FICHAS PUBLICADAS</b><span>Este cajón no contiene puntos informativos en el Genially actual.</span></div>` : ""}
-          <div class="image-caption">
-            <span>${visibleTools.length ? "Selecciona un punto para consultar la herramienta" : "Fotografía de referencia del cajón"}</span>
-            <b>${visibleTools.length} puntos registrados</b>
-          </div>
+        </div>
+        <div class="image-caption">
+          <span>${visibleTools.length ? "Toca directamente una herramienta para consultar su ficha" : "Fotografía de referencia del cajón"}</span>
+          <b>${visibleTools.length} zonas interactivas invisibles</b>
         </div>
 
         <div class="action-row">
-          <div class="legend"><span><i class="legend-dot"></i> Punto interactivo</span><span><i class="legend-orange"></i> Cajón seleccionado</span></div>
+          <div class="legend"><span><i class="legend-dot"></i> Herramientas táctiles</span><span><i class="legend-orange"></i> Cajón seleccionado</span></div>
           <div class="action-buttons">
             ${showingDetail ? `<button class="back-button" id="backToCase">← Volver al estuche</button>` : ""}
             <button class="list-button" id="listButton"><span>${listOpen ? "×" : "+"}</span>${listOpen ? "Cerrar lista" : "Ver lista"}</button>

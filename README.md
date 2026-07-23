@@ -1,8 +1,13 @@
 # Estándar visual del carrito de herramientas
 
 Catálogo profesional e interactivo compatible con GitHub Pages. Conserva el
-acomodo lateral de Genially e incluye nueve cajones, puntos interactivos,
+acomodo lateral de Genially e incluye nueve cajones, zonas táctiles invisibles,
 fichas técnicas, búsqueda y vista de lista.
+
+La interfaz es adaptable: reorganiza la navegación, fotografías, áreas
+interactivas, listas y fichas para teléfonos, tabletas, computadoras y pantallas
+grandes. También incluye un modo compacto para teléfonos colocados
+horizontalmente.
 
 ## Publicar
 
@@ -38,8 +43,8 @@ tool(
 )
 ```
 
-Los valores `50, 50` son la posición horizontal y vertical del punto
-interactivo, expresada en porcentaje. Modifícalos hasta colocar el punto encima
+Los valores `50, 50` son la posición horizontal y vertical de la zona
+interactiva, expresada en porcentaje. Modifícalos hasta colocar la zona encima
 de la herramienta.
 
 El cajón 8 contiene una segunda colección llamada `detailTools`; corresponde a
