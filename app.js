@@ -294,6 +294,7 @@ function render() {
   const visibleTitle = showingDetail ? "Interior del juego de dados" : drawer.title;
   const visibleCategory = showingDetail ? "Selecciona una pieza para consultar su medida" : drawer.category;
   const visibleRatio = showingDetail ? "936 / 706" : drawer.id === 2 ? "795 / 445" : "4 / 3";
+  const stageRatioClass = showingDetail ? "stage-detail" : drawer.id === 2 ? "stage-wide" : "stage-standard";
 
   app.innerHTML = `
     <div class="catalog-shell">
@@ -325,16 +326,12 @@ function render() {
         </div>
       </aside>
 
-      <section class="content-stage">
+      <section class="content-stage ${stageRatioClass}">
         <header class="content-header">
           <div>
             <p>CAJÓN ${String(drawer.id).padStart(2, "0")}${showingDetail ? " · DETALLE" : ""}</p>
             <h1>${visibleTitle}</h1>
             <span>${visibleCategory}</span>
-          </div>
-          <div class="header-meta">
-            <span><i></i> Configuración vigente</span>
-            <b>${showingDetail ? `${visibleTools.length} fichas` : `${toolCount(visibleTools)} piezas`}</b>
           </div>
         </header>
 
