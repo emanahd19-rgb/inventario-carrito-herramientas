@@ -25,21 +25,25 @@ No requiere Node.js, instalación ni compilación.
 Abre `app.js`, localiza el cajón y agrega un registro dentro de `tools`:
 
 ```js
-[
+tool(
   "Nombre de la herramienta",
-  "Marca",
-  1,
-  "Uso principal",
-  "Recomendación de seguridad",
+  "Medida o especificación",
   50,
   50,
-  "Especificación opcional"
-]
+  {
+    brand: "Marca",
+    part: "Número de parte",
+    quantity: 1
+  }
+)
 ```
 
 Los valores `50, 50` son la posición horizontal y vertical del punto
 interactivo, expresada en porcentaje. Modifícalos hasta colocar el punto encima
 de la herramienta.
+
+El cajón 8 contiene una segunda colección llamada `detailTools`; corresponde a
+la vista interior del juego de dados.
 
 ## Cambiar o rotar una fotografía
 
