@@ -1,3 +1,11 @@
+/*
+  Estructura de cada herramienta:
+  ["Nombre", "Marca", cantidad, "Uso", "Seguridad", posición X %, posición Y %, "Especificación opcional"]
+
+  Las posiciones X/Y controlan el punto interactivo sobre la fotografía.
+*/
+const TOTAL_STANDARD_TOOLS = 201;
+
 const drawers = [
   {
     id: 1, title: "Herramienta general", category: "Pendiente de documentar",
@@ -7,8 +15,7 @@ const drawers = [
     id: 2, title: "Llaves combinadas", category: "Métricas y SAE",
     image: "./images/cajon-2-llaves.png", imageClass: "crop-genially",
     tools: [
-      ["llaves combinadas SAE", "Varios", 12, "Ajuste de tornillería en pulgadas.", "Seleccionar la medida exacta.", 40, 47],
-      
+      ["Juego de llaves combinadas SAE", "Varios", 12, "Ajuste de tornillería en pulgadas.", "Seleccionar la medida exacta.", 37, 47],
       ["Juego de llaves combinadas métricas", "Varios", 11, "Ajuste de tornillería métrica.", "No utilizar extensiones.", 73, 48]
     ]
   },
@@ -16,7 +23,7 @@ const drawers = [
     id: 3, title: "Terminales y diagnóstico", category: "Herramienta eléctrica",
     image: "./images/cajon-2.jpeg",
     tools: [
-      ["Kit de medición", "Fluke", 1, "Diagnóstico eléctrico con accesorios.", "Revisar categoría y rango antes de medir.", 22, 25],
+      ["Pinza amperimétrica", "Fluke", 1, "Medición de corriente y diagnóstico eléctrico.", "Confirmar la categoría, el rango y el estado de las puntas antes de medir.", 22, 25, "600 A"],
       ["Juego de puntas de prueba", "Genérico", 5, "Inspección y liberación de conectores.", "No introducir en circuitos energizados.", 57, 23],
       ["Pinza para anillos externa", "Truper", 1, "Montaje de anillos de retención.", "Usar protección ocular.", 82, 28],
       ["Kit de precisión", "Wera", 1, "Trabajos de ajuste fino.", "Usar la punta correspondiente.", 30, 58],
@@ -125,7 +132,7 @@ function render() {
 
         <div class="standard-card">
           <div><i class="stat-icon">▤</i><strong>9</strong><span>CAJONES</span></div>
-          <div><i class="stat-icon">⚒</i><strong>201</strong><span>HERRAMIENTAS<br>ESTÁNDAR</span></div>
+          <div><i class="stat-icon">⚒</i><strong>${TOTAL_STANDARD_TOOLS}</strong><span>HERRAMIENTAS<br>ESTÁNDAR</span></div>
           <div><i class="stat-icon">✓</i><strong class="approved">APROBADA</strong><span>CONFIGURACIÓN</span></div>
         </div>
       </aside>
@@ -199,7 +206,7 @@ function renderList(tools) {
   grid.innerHTML = tools.length ? tools.map((tool, index) => `
     <button class="inventory-item" data-list-tool="${index}">
       <span class="item-number">${String(index + 1).padStart(2, "0")}</span>
-      <span><strong>${tool[0]}</strong><small>${tool[1]}</small></span>
+      <span><strong>${tool[0]}</strong><small>${tool[1]}${tool[7] ? ` · ${tool[7]}` : ""}</small></span>
       <b>×${tool[2]}</b>
       <i>›</i>
     </button>`).join("") : `<div class="empty-list">No hay herramientas registradas en este cajón.</div>`;
@@ -220,6 +227,7 @@ function openTool(drawer, tool) {
       <div><small>ESTADO</small><strong class="status-ok">● Vigente</strong></div>
     </div>
     <div class="modal-row"><span>USO</span><p>${tool[3]}</p></div>
+    ${tool[7] ? `<div class="modal-row"><span>ESPECIFICACIÓN</span><p>${tool[7]}</p></div>` : ""}
     <div class="modal-row safety"><span>SEGURIDAD</span><p>${tool[4]}</p></div>
     <button class="modal-primary" id="modalDone">Entendido</button>`;
   modal.classList.remove("is-hidden");
