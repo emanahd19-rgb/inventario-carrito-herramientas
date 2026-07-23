@@ -7,7 +7,8 @@ const drawers = [
     id: 2, title: "Llaves combinadas", category: "Métricas y SAE",
     image: "./images/cajon-2-llaves.png", imageClass: "crop-genially",
     tools: [
-      ["Juego de llaves combinadas SAE", "Varios", 12, "Ajuste de tornillería en pulgadas.", "Seleccionar la medida exacta.", 37, 47],
+      ["llaves combinadas SAE", "Varios", 12, "Ajuste de tornillería en pulgadas.", "Seleccionar la medida exacta.", 40, 47],
+      
       ["Juego de llaves combinadas métricas", "Varios", 11, "Ajuste de tornillería métrica.", "No utilizar extensiones.", 73, 48]
     ]
   },
