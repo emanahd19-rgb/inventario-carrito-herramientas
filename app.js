@@ -41,7 +41,7 @@ const drawers = [
       tool("Llave combinada 11/16", '11/16"', 34.8, 49.9),
       tool("Llave combinada 3/4", '3/4"', 35.1, 42.8),
       tool("Llave combinada 13/16", '13/16"', 34.8, 35),
-      tool("Llave combinada 9 mm", "9 mm", 70.2, 33),
+      tool("Llave combinada 9 mm", "9 mm", 70.1, 33),
       tool("Llave combinada 10 mm", "10 mm", 70.4, 36.3),
       tool("Llave combinada 11 mm", "11 mm", 70.9, 40.1),
       tool("Llave combinada 12 mm", "12 mm", 71.6, 44.3),
